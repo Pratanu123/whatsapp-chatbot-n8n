@@ -107,7 +107,23 @@ Meta's test credentials/numbers and production access have different limits and 
 
 ## Configure AI model credentials
 
-The workflow connects **OpenRouter Chat Model** as the primary model (`openrouter/free`) and **OpenAI Chat Model** as the fallback. Create the corresponding credentials in n8n, select them on those nodes, and confirm that the chosen models are available to your accounts. If you do not want to use a fallback, configure the AI Agent/model connections intentionally rather than assuming the uncredentialed fallback will work.
+The AI Agent has two model connections:
+
+- **Primary:** **OpenRouter Chat Model**, configured with `openrouter/free`.
+- **Fallback:** **OpenAI Chat Model**, connected to the agent's fallback-model input.
+
+Create the corresponding credentials in n8n and select them on the model nodes. Confirm that each model is available to your account and test both connections before activating the workflow. The exported workflow does not include credentials, so the fallback will not work until you configure it.
+
+### Use another fallback model
+
+You can use a different provider for the fallback, or use a second OpenRouter model:
+
+1. Add the provider's n8n chat-model node (for example, OpenRouter, OpenAI, Anthropic, Google Gemini, or a locally hosted model supported by your n8n installation).
+2. Configure its provider credentials and choose a model that supports the chat features required by the AI Agent. With OpenRouter, choose a model identifier available to your OpenRouter account; `openrouter/free` is the current primary model in this export.
+3. Connect the new model node to the AI Agent's **Fallback Model** input, replacing the OpenAI connection if desired. Keep your primary model connected to the primary language-model input.
+4. Test normal requests and the fallback path in n8n's execution view. Check provider availability, rate limits, and model compatibility; a fallback is useful only if its credentials and provider are independently available.
+
+The fallback is an alternate model connection in the n8n workflow. It is not automatically configured just by selecting a model in OpenRouter, and model availability or names may change. If you do not want a fallback, adjust the AI Agent's fallback settings and model connections intentionally.
 
 ## Import and activate the workflow
 
